@@ -102,6 +102,20 @@ workflows:
       - write_to_file:
           filename_template: "summary_{today}.md"
 
+  - id: manage_shifts
+    description: "Inflowフォルダからシフト情報を抽出し、Tasks/Shifts.mdに整理。カレンダー同期の準備。"
+    input_dir: "Inflow/"
+    output_file: "Tasks/Shifts.md"
+    append: true
+    steps:
+      - scan_directory:
+          dir: "Inflow/"
+      - extract_shifts_from_inflow:
+          instruction: "Inflow内の「シフト: YYYY-MM-DD シフト名」または「シフト: YYYY-MM-DD HH:MM-HH:MM」形式の行を抽出し、日付、時間、シフト名を解析せよ"
+      - update_shift_file:
+          instruction: "抽出したシフト情報をTasks/Shifts.mdに追記または更新せよ。重複は避けること。"
+      - delete_processed_files: true
+
 ---
 
 # GEMINI CLI ワークフロー定義（ver.4）
