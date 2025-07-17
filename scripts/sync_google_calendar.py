@@ -11,7 +11,8 @@ from googleapiclient.errors import HttpError
 # Google Calendar APIのスコープ
 SCOPES = ['https://www.googleapis.com/auth/calendar.events']
 # カレンダーID (通常は 'primary' でOK)
-CALENDAR_ID = 'primary'
+# CALENDAR_ID = 'primary' # コメントアウトまたは削除
+CALENDAR_ID = 'ten.ten.tenma.goal@gmail.com' # ここをボスのGoogleアカウントのメールアドレスに修正 (既に修正済みのはず)
 # タスクファイルへのパス (GitHub Actionsで実行されることを想定し、ルートからの相対パス)
 TASKS_FILE_PATH = 'Tasks/University.md'
 
@@ -82,6 +83,9 @@ def create_google_calendar_event(service, task_name, due_date):
     }
 
     try:
+        # --- デバッグ情報追加 ---
+        print(f"Attempting to create event '{task_name}' on calendar '{CALENDAR_ID}'...")
+        # --- デバッグ情報追加 ---
         event = service.events().insert(calendarId=CALENDAR_ID, body=event).execute()
         print(f"Event created: {event.get('htmlLink')} for task '{task_name}'")
     except HttpError as error:
@@ -103,15 +107,27 @@ def main():
         print("No incomplete tasks found to sync.")
         return
 
-    print(f"Found {len(incomplete_tasks)} incomplete tasks. Checking existing events...")
+    print(f"Found {len(incomplete_tasks)} incomplete tasks. Checking existing events on calendar '{CALENDAR_ID}'...") # デバッグ情報追加
 
     # 既存のイベントを取得し、重複登録を避ける
     # 今日から未来のイベントを検索
     now = datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+
+    # --- デバッグ情報追加 ---
+    print(f"Querying events from '{CALENDAR_ID}' starting from {now}...")
+    # --- デバッグ情報追加 ---
+
     events_result = service.events().list(calendarId=CALENDAR_ID, timeMin=now,
                                           maxResults=250, singleEvents=True,
                                           orderBy='startTime').execute()
     existing_events = events_result.get('items', [])
+
+    # --- デバッグ情報追加 ---
+    print(f"Found {len(existing_events)} existing events on calendar '{CALENDAR_ID}'.")
+    for event in existing_events:
+        print(f"  - Existing event: Summary='{event.get('summary')}', ID='{event.get('id')}'")
+    # --- デバッグ情報追加 ---
+
     existing_summaries = {event['summary'] for event in existing_events}
 
     for task in incomplete_tasks:
@@ -122,7 +138,7 @@ def main():
         if task_name not in existing_summaries:
             create_google_calendar_event(service, task_name, task_due_date)
         else:
-            print(f"Task '{task_name}' already exists in calendar. Skipping.")
+            print(f"Task '{task_name}' already exists in calendar '{CALENDAR_ID}'. Skipping.") # デバッグ情報追加
 
     print("Google Calendar sync script finished.")
 
