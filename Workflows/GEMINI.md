@@ -2,11 +2,11 @@
 title: "GEMINI WORKFLOWS - BOSS COMPLETE v4"
 author: "ボス"
 version: "4.0.0"
-updated: 2025-07-15
+updated: "2025-07-15"
 
 workflows:
   - id: summarize_inflow_to_daily
-    description: "Inflowフォルダからアイデアやメモを要約し、Dailyに追記. タスクはmanage_tasksで処理（タスクとtodoの違い：タスクは主に学校に関することや就活に関する内容. todoは日常生活に関すること）"
+    description: "Inflowフォルダからアイデアやメモを要約し、Dailyに追記. タスクはmanage_tasksで処理（タスクとtodoの違い：タスクは主に学校に関することや就活に関する内容. todoは日常生活に関すること）. URLはWeb Clipperで処理されるため、Inflowからは除外される. **フォーマットはCalloutブロックに統一すること**"
     input_dir: "Inflow/"
     output_file: "Daily/{today}.md"
     append: true
@@ -14,13 +14,10 @@ workflows:
       - scan_directory:
           dir: "Inflow/"
       - classify_fragments:
-          categories: ["url", "memo", "idea", "reflection", "todo"]
+          categories: ["memo", "idea", "reflection", "todo", referenes]
       - manage_todo:
           instruction: |
             todoにはチェックボックスを付与すること
-      - fetch_urls:
-          instruction: |
-            URLを抽出し、Dailyに参照として記載せよ（詳細な要約はLiteratureNoteで）
       - summarize_free_text:
           instruction: |
             テキストから断片的思考やメモを抽出し、Dailyに追記せよ（URLの内容ではない）
@@ -48,6 +45,21 @@ workflows:
     description: "Dailyノートのurlから要約と知見を抽出しLiteratureNoteを作成。要約を端折りすぎないこと。"
     input_dir: "Daily/"
     output_dir: "LiteratureNote/"
+
+  - id: process_clipped_notes
+    description: "Obsidian Web ClipperでクリップされたファイルをLiteratureNoteに移動し、処理後に元のファイルを削除する。"
+    input_dir: "Clippings/"
+    output_dir: "LiteratureNote/"
+    steps:
+      - scan_directory:
+          dir: "Clippings/"
+      - add_literature_note_tags:
+          instruction: |
+            クリップされたファイルに、文献ノートとして適切なタグ（例: #WebClipped, #情報源）を付与せよ。
+            必要に応じて、ファイルの内容からキーワードを抽出し、追加のタグを付与すること。
+      - move_files:
+          destination_dir: "LiteratureNote/"
+      - delete_processed_files: true
 
   - id: draft_permanent_note
     description: "FleetingNoteとLiteratureNoteを横断してPermanentNoteを生成"
