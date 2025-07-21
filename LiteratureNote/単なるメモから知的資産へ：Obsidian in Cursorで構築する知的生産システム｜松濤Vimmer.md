@@ -254,7 +254,7 @@ ObsidianとCursorを組み合わせることで、Obsidianの優れた知識管�
 1. **知識の構造化** ：情報をどのように整理・分類するか
 2. **同期と管理** ：複数デバイス間でどのように情報を共有・管理するか
 3. **インプット・アウトプットの流れ** ：情報の取り込みから発信までのプロセス
-![画像](https://assets.st-note.com/img/1741696273-8UpcAxFR4kSVroQ1G0El5HXI.png?width=1200)
+![画像](https://assets.st-note.com/img/1741696273-8UpcAxFR4kSVroQ1G0ElHXI.png?width=1200)
 
 2025年03月時点でのObsidian in Cursor 活用フレームワーク
 
@@ -291,7 +291,7 @@ Zettelkastenをカスタムした構成図
 
 実際に作成したPermanentNote
 
-- **LiteratureNote** ：Web上のコンテンツ、参考資料や文献からの情報をまとめたノートです。LiteratureNoteのほとんどはObsidian Web Clipper でWebから保存した記事になります。最近はリポジトリの内容も含めたりします。フロントマターはWeb Clipper で保存時にほとんどが自動生成されます。permanentNote のリンクだけ手動で行い双方向リンクを設定します。
+- **LiteratureNote** ：Web上のコンテンツ、参考資料や文献からの情報をまとめたノートです。LiteratureNoteのほとんどはObsidian Web Clipper でWebから保存した記事になります。最近はリポジリの内容も含めたりします。フロントマターはWeb Clipper で保存時にほとんどが自動生成されます。permanentNote のリンクだけ手動で行い双方向リンクを設定します。
 ![画像](https://assets.st-note.com/img/1741963721-vHGAjVOaoWbiN4gKmdBe6x3F.png?width=1200)
 
 実際に作成したLiteratureNote
@@ -396,7 +396,7 @@ Obsidian Mobile でもノートに対して書き込みが可能ですが先程�
 **インプット③Obsidian Web Clipper  
 **Chrome拡張機能のObsidian Web Clipperを使用して、Webページの内容をObsidianに取り込むことができます。  
 気になった記事や参考にしたいWebコンテンツを簡単に保存できます。  
-わたしはNotebookLMの出力やuithub でテキスト化したリポジトリ内容を保存することが多いです。(詳細は実践編で。)
+わたしはNotebookLMの出力やuithub でテキスト化したリポジリ内容を保存することが多いです。(詳細は実践編で。)
 
 [**Obsidian Web Clipper** *Highlight and capture web pages in your favorite browser. Sav* *obsidian.md*](https://obsidian.md/clipper)
 
@@ -435,7 +435,7 @@ literatureNote や fleetingNote などのノートからまとめノート(Perma
 - Web上でクリップした記事をまとめる
 - Kindleのハイライトからまとめノートを作成する
 - 日頃メモしている内容をまとめる
-- リポジトリ内容から実装内容をまとめる
+- リポジリ内容から実装内容をまとめる
 
 以下では、Githubのリポジリ内容から技術スタック、環境構築方法、シーケンス図、メインロジックをアウトプットする例を紹介します。
 
@@ -663,3 +663,9 @@ ObsidianとCursorを組み合わせることで、効率的なメモ管理とア
 知的生産ツールとAI技術は日々進化しています。基本的なフレームワークを押さえつつ、新しいツールや手法を柔軟に取り入れることで、さらなる生産性向上が期待できます。
 
 単なるメモから知的資産へ：Obsidian in Cursorで構築する知的生産システム｜松濤Vimmer
+
+
+### 関連ノート
+- [[Zettelkasten-Notes/FleetingNote/2025-07-18]]
+- [[Zettelkasten-Notes/LiteratureNote/最高のAIコーディング環境を目指してあれこれ試した結果と教訓（2025_07）]]
+- [[Zettelkasten-Notes/LiteratureNote/Claude？Gemini？いや、それでもGithub Copilotを使い続けるという話]]

@@ -35,7 +35,7 @@ tags:
 
 ✅
 
-[はじめに](https://swr.vercel.app/ja/docs/getting-started) · [例題](https://swr.vercel.app/ja/examples/basic) · [ブログ](https://swr.vercel.app/ja/blog) · [GitHub リポジトリ (opens in a new tab)](https://github.com/vercel/swr)
+[はじめに](https://swr.vercel.app/ja/docs/getting-started) · [例題](https://swr.vercel.app/ja/examples/basic) · [ブログ](https://swr.vercel.app/ja/blog) · [GitHub リポジリ (opens in a new tab)](https://github.com/vercel/swr)
 
 ## 概要
 
@@ -96,3 +96,7 @@ SWR は、React フレームワークである [Next.js (opens in a new tab)](ht
 お気軽に [GitHub のディスカッション (opens in a new tab)](https://github.com/vercel/swr/discussions) に参加してください！
 
 Last updated on
+
+### 関連ノート
+- [[Zettelkasten-Notes/LiteratureNote/React hooksを基礎から理解する (useEffect編)]]
+- [[Zettelkasten-Notes/LiteratureNote/React hooksを基礎から理解する (useReducer編)]]

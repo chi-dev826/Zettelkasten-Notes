@@ -234,10 +234,14 @@ Github Copilot Agent最高なので、もっと話題にしてあげてくださ
 1. あなたにマッチした記事をお届けします
 2. 便利な情報をあとで効率的に読み返せます
 3. ダークテーマを利用できます
-[ログインすると使える機能について](https://help.qiita.com/ja/articles/qiita-login-user)
+[ログインすると使える機能について](https://qiita.com/login?callback_action=login_or_signup&redirect_to=%2FCinnamonSea2073%2Fitems%2F4bca9196723ac48e40b2&realm=qiita)
 
 [新規登録](https://qiita.com/signup?callback_action=login_or_signup&redirect_to=%2FCinnamonSea2073%2Fitems%2F4bca9196723ac48e40b2&realm=qiita) [ログイン](https://qiita.com/login?callback_action=login_or_signup&redirect_to=%2FCinnamonSea2073%2Fitems%2F4bca9196723ac48e40b2&realm=qiita)
 
 [28](https://qiita.com/CinnamonSea2073/items/4bca9196723ac48e40b2/likers)
 
 13
+
+### 関連ノート
+- [[Zettelkasten-Notes/LiteratureNote/最高のAIコーディング環境を目指してあれこれ試した結果と教訓（2025_07）]]
+- [[Zettelkasten-Notes/LiteratureNote/単なるメモから知的資産へ：Obsidian in Cursorで構築する知的生産システム｜松濤Vimmer]]

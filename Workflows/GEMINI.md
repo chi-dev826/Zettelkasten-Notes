@@ -6,7 +6,7 @@ updated: "2025-07-15"
 
 workflows:
   - id: summarize_inflow_to_daily
-    description: "Inflowフォルダからアイデアやメモを要約し、Dailyに追記. タスクはmanage_tasksで処理（タスクとtodoの違い：タスクは主に学校に関することや就活に関する内容. todoは日常生活に関すること）. URLはWeb Clipperで処理されるため、Inflowからは除外される. **フォーマットはCalloutブロックに統一すること**"
+    description: "Inflowフォルダからアイデアやメモを要約し、Dailyに追記。"
     input_dir: "Inflow/"
     output_file: "Daily/{today}.md"
     append: true
@@ -28,7 +28,7 @@ workflows:
       - delete_processed_files: true
 
   - id: manage_tasks
-    description: "Dailyノートのタスクを管理（Inflowからの追加、完了タスクの削除、期限抽出）. 一つのファイルでリスト形式で管理."
+    description: "Dailyノートのタスクを管理（Inflowからの追加、完了タスクの削除、期限抽出）。"
     input_dir: "Inflow/"
     output_dir: "Tasks/
     append: true
@@ -42,21 +42,20 @@ workflows:
       - delete_processed_files: true
 
   - id: create_literature_note_from_daily
-    description: "Dailyノートのurlから要約と知見を抽出しLiteratureNoteを作成。要約を端折りすぎないこと。"
+    description: "DailyノートのURLから要約と知見を抽出しLiteratureNoteを作成。"
     input_dir: "Daily/"
     output_dir: "LiteratureNote/"
 
   - id: process_clipped_notes
-    description: "Obsidian Web ClipperでクリップされたファイルをLiteratureNoteに移動し、処理後に元のファイルを削除する。"
-    input_dir: "Clippings/"
+    description: "Obsidian Web ClipperでクリップされたファイルをZettelkasten-Notes/LiteratureNoteに移動し、処理後に元のファイルを削除する。"
+    input_dir: "../Clippings/"
     output_dir: "LiteratureNote/"
     steps:
       - scan_directory:
-          dir: "Clippings/"
+          dir: "../Clippings/"
       - add_literature_note_tags:
           instruction: |
-            クリップされたファイルに、文献ノートとして適切なタグ（例: #WebClipped, #情報源）を付与せよ。
-            必要に応じて、ファイルの内容からキーワードを抽出し、追加のタグを付与すること。
+            クリップされたファイルに、文献ノートとして適切なタグを付与せよ。
       - move_files:
           destination_dir: "LiteratureNote/"
       - delete_processed_files: true
@@ -93,7 +92,7 @@ workflows:
       - "IndexNote/Company_Index.md"
 
   - id: self_analysis_from_daily_and_selfknowledge
-    description: "DailyとSelfKnowledgeから自己分析を行い、SelfAnalysisへ出力"
+    description: "DailyとSelfKnowledgeから自己分析を行い、SelfAnalysisへ出力。"
     input_dirs:
       - "Daily/"
       - "SelfKnowledge/"
@@ -115,7 +114,7 @@ workflows:
           filename_template: "summary_{today}.md"
 
   - id: manage_shifts
-    description: "Inflowフォルダからシフト情報を抽出し、Tasks/Shifts.mdに整理。カレンダー同期の準備。"
+    description: "Inflowフォルダからシフト情報を抽出し、Tasks/Shifts.mdに整理。"
     input_dir: "Inflow/"
     output_file: "Tasks/Shifts.md"
     append: true
@@ -136,33 +135,28 @@ workflows:
 
 ## ディレクトリ構成（最新版）
 
-```
-.
-├── Inflow/                 # 投げ込みメモ、URL、思考断片（未整理の一次情報）
-├── Daily/                  # 日次記録（その日の活動、簡易ToDo、高レベルな気づき。Inflowから整理された情報への参照）
-├── LiteratureNote/         # 外部資料の要約・知見（URLや文献の詳細な要約と考察。主題に関する詳細なタグ付け）
-├── FleetingNote/           # 一時的な気づき・構想（まだ未整理のアイデアや思考の断片）
-├── PermanentNote/          # 永続的な概念・知識（FleetingやLiteratureを統合し、普遍的な知識として昇華。抽象的なタグ付け）
-├── DevIdeas/               # 開発アイデアや技術構想（プロジェクト、機能、バグなど開発に関する具体的な要素）
-├── JobHunt/
-│   ├── CompanyResearch/    # 企業分析結果（企業情報、求める人物像など就職活動の具体的な要素）
-│   ├── Experience/         # 体験ベースの棚卸し（自己PRやESの元となる具体的な経験談）
-│   └── Drafts/             # ESや志望動機草案（企業情報と自己経験を基に生成された下書き）
-├── SelfKnowledge/          # 価値観・信念・過去の蓄積（自己分析の元となる価値観、強み、弱み、過去の記録）
-├── SelfAnalysis/           # 自己分析の生成物（DailyやSelfKnowledgeを元に自動生成された自己分析結果）
+このワークフローは、基本的に`Zettelkasten-Notes`ディレクトリを基準に動作しますが、一部のワークフローはVaultのルートディレクトリを参照します。
 
 ```
+. (Obsidian Vault Root)
+├── Clippings/              # ✅ Web Clipperの自動保存先 (ワークフローがここを読み取る)
+└── Zettelkasten-Notes/
+    ├── Daily/
+    ├── DevIdeas/
+    ├── FleetingNote/
+    ├── IndexNote/
+    ├── Inflow/
+    ├── JobHunt/
+    ├── LiteratureNote/     # ✅ Clippingsからの移動先
+    ├── PermanentNote/
+    ├── SelfAnalysis/
+    ├── SelfKnowledge/
+    ├── Tasks/
+    └── Workflows/
+        └── GEMINI.md       # このワークフロー定義ファイル
+```
 
-## 必読
 
-- summarize_inflow_to_dailyでは、適切に情報を仕分けすることが求められる
-- ボスの手書きテキストとURLの内容を正確に識別すること（DialyノートにURLの内容を含めないため）
-- すべてのファイルにタグを付与すること
-- 基本的には"キーワード"ではなく、その"内容"に焦点を当てること
-- Dialyノートには文献に関するタグやtodoに関するタグを付与しないこと. カテゴリ名をタグに含めないこと
-- 文献ノートには文献に関する"キーワード"に焦点を当てること（例：AI, React, Cursor）
-- 生成するファイルには適宜アイコンなどを用いて視覚的にわかりやすい内容を心がけること（以前のファイルを一つ読み込んで形式を揃えること）
-- タスク管理表は適宜わかりやすく加工すること
 
 ---
 
