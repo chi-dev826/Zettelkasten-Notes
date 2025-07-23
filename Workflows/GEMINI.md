@@ -28,7 +28,7 @@ workflows:
           file: "Inflow/_QuickCapture.md"
           instruction: "処理が完了したため、_QuickCapture.mdの中身を空にせよ。"
       - commit_changes:
-          instruction: "処理された変更をGitにコミットし、プッシュせよ。"
+          instruction: "処理された変更をGitにコミットし、プッシュせよ。コミットメッセージは動的に生成され、一時ファイル（temp_commit_message.txt）経由で安全に渡される。"
 
   - id: manage_tasks
     description: "Dailyノートのタスクを管理（完了タスクの削除、期限抽出）。Inflowからの直接追加は廃止。"
@@ -123,6 +123,19 @@ workflows:
       - update_shift_file:
           instruction: "抽出したシフト情報をTasks/Shifts.mdに追記または更新せよ。重複は避けること。"
       - delete_processed_files: true
+
+  - id: add_event_to_calendar
+    description: "Clippingsや手動での情報からイベントを作成し、Googleカレンダーに自動同期する。"
+    input_dir: "Clippings/"
+    output_file: "Tasks/Events.md"
+    steps:
+      - extract_event_info:
+          instruction: "Clippings内のファイルやユーザーの指示から、イベント名、日付、時刻を抽出せよ。"
+      - format_and_append_event:
+          target_file: "Tasks/Events.md"
+          instruction: "抽出した情報を `- [ ] {イベント名} YYYY-MM-DD HH:MM` の形式で Tasks/Events.md に追記せよ。"
+      - commit_and_push:
+          instruction: "変更をGitにコミット＆プッシュせよ。これにより、GitHub Actionsがトリガーされ、Googleカレンダーに同期される。"
 
 ---
 
