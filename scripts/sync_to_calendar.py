@@ -24,7 +24,7 @@ def get_credentials():
 def parse_university_tasks(content):
     """大学タスクのMarkdownテーブルを解析"""
     events = []
-    task_pattern = re.compile(r"\|\s*\[\s*\]\s*\|\s*(.+?)\s*\|\s*(\d{4}-\d{2}-\d{2})\s*\|")
+    task_pattern = re.compile(r"| [ x]\s*|\s*(.+?)\s*|\s*(\d{4}-\d{2}-\d{2})\s*|")
     for line in content.strip().split('\n'):
         match = task_pattern.match(line)
         if match:
@@ -65,20 +65,15 @@ def parse_shifts(content):
     return events
 
 def parse_general_events(content):
-    """一般的なイベント形式を解析（時刻指定・終日の両方に対応）"""
+    """イベントのMarkdownテーブルを解析"""
     events = []
-    # 時刻指定あり: - [ ] イベント名 YYYY-MM-DD HH:MM-HH:MM
-    time_event_pattern = re.compile(r"- [ [\\]]\\s*(.+?)\\s*(\\d{4}-\\d{2}-\\d{2})\\s*(\\d{2}:\\d{2})-(\\d{2}:\\d{2})")
-    # 終日指定: - [ ] イベント名 YYYY-MM-DD
-    all_day_event_pattern = re.compile(r"- [ [\\]]\\s*(.+?)\\s*(\\d{4}-\\d{2}-\\d{2})$")
-
+    # テーブルの各行から情報を抽出する正規表現
+    # | HH:MM-HH:MM | イベント名 | YYYY-MM-DD | ... | という形式を想定
+    event_pattern = re.compile(r"|\s*(\d{2}:\d{2})-(\d{2}:\d{2})\s*|\s*(.+?)\s*|\s*(\d{4}-\d{2}-\d{2})\s*|")
     for line in content.strip().split('\n'):
-        line = line.strip()
-        time_match = time_event_pattern.match(line)
-        all_day_match = all_day_event_pattern.match(line)
-
-        if time_match:
-            summary, date_str, start_time_str, end_time_str = time_match.groups()
+        match = event_pattern.match(line)
+        if match:
+            start_time_str, end_time_str, summary, date_str = match.groups()
             start_datetime = datetime.strptime(f"{date_str} {start_time_str}", '%Y-%m-%d %H:%M')
             end_datetime = datetime.strptime(f"{date_str} {end_time_str}", '%Y-%m-%d %H:%M')
             events.append({
@@ -86,16 +81,7 @@ def parse_general_events(content):
                 'start': {'dateTime': start_datetime.isoformat(), 'timeZone': TIMEZONE},
                 'end': {'dateTime': end_datetime.isoformat(), 'timeZone': TIMEZONE},
             })
-        elif all_day_match:
-            summary, date_str = all_day_match.groups()
-            event_date = datetime.strptime(date_str, '%Y-%m-%d').date()
-            events.append({
-                'summary': summary.strip(),
-                'start': {'date': event_date.isoformat()},
-                'end': {'date': (event_date + timedelta(days=1)).isoformat()},
-            })
     return events
-
 
 def sync_events(service, events_to_sync):
     """カレンダーとイベントを同期"""
