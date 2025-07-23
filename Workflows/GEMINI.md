@@ -6,40 +6,37 @@ updated: "2025-07-15"
 
 workflows:
   - id: summarize_inflow_to_daily
-    description: "Inflowフォルダからアイデアやメモを要約し、Dailyに追記。"
-    input_dir: "Inflow/"
-    output_file: "Daily/{today}.md"
-    append: true
+    description: "Inflow/_QuickCapture.mdからアイデアやメモを解析し、Dailyや各ノートに追記・整理する。ハイブリッド・クイックキャプチャの中核。"
+    input_file: "Inflow/_QuickCapture.md"
     steps:
-      - scan_directory:
-          dir: "Inflow/"
-      - classify_fragments:
-          categories: ["memo", "idea", "reflection", "todo", referenes]
-      - manage_todo:
+      - read_and_classify_fragments:
+          source_file: "Inflow/_QuickCapture.md"
+          categories: ["memo", "idea", "reflection", "todo", "reference", "devidea", "university_task", "shift", "general_task"]
           instruction: |
-            todoにはチェックボックスを付与すること
-      - summarize_free_text:
+            接頭辞（todo:, memo:, 大学タスク:, シフト:, タスク:など）や内容に基づき、各フラグメントを分類せよ。
+      - process_fragments:
           instruction: |
-            テキストから断片的思考やメモを抽出し、Dailyに追記せよ（URLの内容ではない）
-      - write_to_file:
-          filename_template: "{today}.md"
-          mode: "append"
-          section_headers: true
-      - delete_processed_files: true
+            分類に基づき、以下の処理を実行せよ。
+            - todo: 今日のDailyNoteのToDoセクションに追記。
+            - memo, idea, reflection: 今日のDailyNoteの各セクションに追記。
+            - reference: URLをDailyNoteの参照セクションに記載、またはLiteratureNote作成を提案。
+            - devidea: DevIdeasフォルダに新しいノートとして起票。
+            - university_task: Tasks/University.mdの表形式に追記/更新。
+            - shift: Tasks/Shifts.mdに行として追記。
+            - general_task: Tasks/General.mdにチェックボックス形式で追記。
+      - clear_processed_file:
+          file: "Inflow/_QuickCapture.md"
+          instruction: "処理が完了したため、_QuickCapture.mdの中身を空にせよ。"
+      - commit_changes:
+          instruction: "処理された変更をGitにコミットし、プッシュせよ。"
 
   - id: manage_tasks
-    description: "Dailyノートのタスクを管理（Inflowからの追加、完了タスクの削除、期限抽出）。"
-    input_dir: "Inflow/"
-    output_dir: "Tasks/
-    append: true
+    description: "Dailyノートのタスクを管理（完了タスクの削除、期限抽出）。Inflowからの直接追加は廃止。"
     steps:
-      - scan_directory:
-          dir: "Inflow/"
-      - extract_todos_from_inflow:
-          instruction: "Inflow内のタスク項目を抽出し、期限があればそれも抽出せよ"
       - process_completed_todos:
-          instruction: "Tasksディレクトリ内の「〇〇完了」とマークされたタスクを削除せよ"
-      - delete_processed_files: true
+          instruction: "Dailyノート内の「- [x]」とマークされたタスクをアーカイブまたは削除せよ。"
+      - extract_deadlines:
+          instruction: "Dailyノート内のタスクから期限情報を抽出し、カレンダー連携などに活用せよ。"
 
   - id: create_literature_note_from_daily
     description: "DailyノートのURLから要約と知見を抽出しLiteratureNoteを作成。"
@@ -145,7 +142,7 @@ workflows:
     ├── DevIdeas/
     ├── FleetingNote/
     ├── IndexNote/
-    ├── Inflow/
+    ├── Inflow/                 # ✅ _QuickCapture.md (単一の入力ゲートウェイ)
     ├── JobHunt/
     ├── LiteratureNote/     # ✅ Clippingsからの移動先
     ├── PermanentNote/
@@ -162,8 +159,7 @@ workflows:
 
 # 実行例（自然言語ベース）
 
-- `gemini run inflow整理して`
-- `gemini run 自己分析まとめて`
-- `gemini run アルバイトIndex作って`
-- `gemini run タスク管理して`
+- `gemini run quick_capture_process`
+- `gemini run self_analysis`
+- `gemini run update_moc`
 

@@ -1,0 +1,54 @@
+
+name: Sync Tasks and Shifts to Google Calendar
+
+on:
+  push:
+    paths:
+      - 'Tasks/University.md'
+      - 'Tasks/Shifts.md'
+  schedule:
+    - cron: '0 0 * * *' # 毎日午前9時 (JST)
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib
+
+      - name: Determine changed file
+        id: changed_files
+        run: |
+          # プッシュイベントから変更されたファイルを取得
+          # cronの場合は両方のファイルを同期対象とする
+          if [ "${{ github.event_name }}" == "push" ]; then
+            files="${{ join(github.event.commits[0].added, ' ') }} ${{ join(github.event.commits[0].modified, ' ') }}"
+            echo "Detected changed files: $files"
+            if [[ $files == *"Tasks/University.md"* ]]; then
+              echo "file_path=Tasks/University.md" >> $GITHUB_OUTPUT
+            elif [[ $files == *"Tasks/Shifts.md"* ]]; then
+              echo "file_path=Tasks/Shifts.md" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "Running on schedule, syncing both files."
+            echo "file_path=Tasks/University.md Tasks/Shifts.md" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run Sync Script
+        if: steps.changed_files.outputs.file_path
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+        run: |
+          for file in ${{ steps.changed_files.outputs.file_path }}; do
+            python scripts/sync_to_calendar.py "$file"
+          done
