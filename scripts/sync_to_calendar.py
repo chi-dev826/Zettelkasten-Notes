@@ -24,7 +24,7 @@ def get_credentials():
 def parse_university_tasks(content):
     """大学タスクのMarkdownテーブルを解析"""
     events = []
-    task_pattern = re.compile(r"| [ x]\s*|\s*(.+?)\s*|\s*(\d{4}-\d{2}-\d{2})\s*|")
+    task_pattern = re.compile(r"\|\s*\[[ x]\]\s*\|\s*(.+?)\s*\|\s*(\d{4}-\d{2}-\d{2})\s*\|")
     for line in content.strip().split('\n'):
         match = task_pattern.match(line)
         if match:
@@ -69,7 +69,7 @@ def parse_general_events(content):
     events = []
     # テーブルの各行から情報を抽出する正規表現
     # | HH:MM-HH:MM | イベント名 | YYYY-MM-DD | ... | という形式を想定
-    event_pattern = re.compile(r"|\s*(\d{2}:\d{2})-(\d{2}:\d{2})\s*|\s*(.+?)\s*|\s*(\d{4}-\d{2}-\d{2})\s*|")
+    event_pattern = re.compile(r"\|\s*(\d{2}:\d{2})-(\d{2}:\d{2})\s*\|\s*(.+?)\s*\|\s*(\d{4}-\d{2}-\d{2})\s*\|")
     for line in content.strip().split('\n'):
         match = event_pattern.match(line)
         if match:
