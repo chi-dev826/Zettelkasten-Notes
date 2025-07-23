@@ -1,11 +1,12 @@
 
-name: Sync Tasks and Shifts to Google Calendar
+name: Sync Tasks, Shifts, and Events to Google Calendar
 
 on:
   push:
     paths:
       - 'Tasks/University.md'
       - 'Tasks/Shifts.md'
+      - 'Tasks/Events.md'
   schedule:
     - cron: '0 0 * * *' # 毎日午前9時 (JST)
 
@@ -30,18 +31,24 @@ jobs:
         id: changed_files
         run: |
           # プッシュイベントから変更されたファイルを取得
-          # cronの場合は両方のファイルを同期対象とする
+          # cronの場合はすべてのファイルを同期対象とする
           if [ "${{ github.event_name }}" == "push" ]; then
             files="${{ join(github.event.commits[0].added, ' ') }} ${{ join(github.event.commits[0].modified, ' ') }}"
             echo "Detected changed files: $files"
+            sync_paths=""
             if [[ $files == *"Tasks/University.md"* ]]; then
-              echo "file_path=Tasks/University.md" >> $GITHUB_OUTPUT
-            elif [[ $files == *"Tasks/Shifts.md"* ]]; then
-              echo "file_path=Tasks/Shifts.md" >> $GITHUB_OUTPUT
+              sync_paths="$sync_paths Tasks/University.md"
             fi
+            if [[ $files == *"Tasks/Shifts.md"* ]]; then
+              sync_paths="$sync_paths Tasks/Shifts.md"
+            fi
+            if [[ $files == *"Tasks/Events.md"* ]]; then
+              sync_paths="$sync_paths Tasks/Events.md"
+            fi
+            echo "file_path=${sync_paths# }" >> $GITHUB_OUTPUT
           else
-            echo "Running on schedule, syncing both files."
-            echo "file_path=Tasks/University.md Tasks/Shifts.md" >> $GITHUB_OUTPUT
+            echo "Running on schedule, syncing all files."
+            echo "file_path=Tasks/University.md Tasks/Shifts.md Tasks/Events.md" >> $GITHUB_OUTPUT
           fi
 
       - name: Run Sync Script
