@@ -1,1 +1,1 @@
-chore: Inflow整理とDailyNote修正
+chore: Clippingsディレクトリを整理
