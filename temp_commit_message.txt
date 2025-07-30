@@ -1,1 +1,1 @@
-fix: DailyNoteのメモ記載日を修正
+feat(JobHunt): NTTドコモビジネスソリューションズの企業研究ノートを追加

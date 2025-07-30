@@ -1,8 +1,7 @@
 ---
-title: "GEMINI WORKFLOWS - BOSS COMPLETE v4"
-author: "ボス"
-version: "4.0.0"
-updated: "2025-07-15"
+# GEMINI WORKFLOWS - schema version 4.0.0
+# このファイルは、Geminiが解釈・実行するための純粋なデータファイルです。
+# 人間向けのドキュメントはここに記述しないでください。
 
 workflows:
   - id: summarize_inflow_to_daily
@@ -16,14 +15,7 @@ workflows:
             接頭辞（todo:, memo:, 大学タスク:, シフト:, タスク:など）や内容に基づき、各フラグメントを分類せよ。
       - process_fragments:
           instruction: |
-            分類に基づき、以下の処理を実行せよ。
-            - todo: 今日のDailyNoteのToDoセクションに追記。
-            - memo, idea, reflection: 今日のDailyNoteの各セクションに追記。
-            - reference: URLをDailyNoteの参照セクションに記載、またはLiteratureNote作成を提案。
-            - devidea: DevIdeasフォルダに新しいノートとして起票。
-            - university_task: Tasks/University.mdの表形式に追記/更新。
-            - shift: Tasks/Shifts.mdに行として追記。
-            - general_task: Tasks/General.mdにチェックボックス形式で追記。
+            分類に基づき、処理を実行せよ。詳細はプロジェクトのGEMINI.mdを参照。
       - clear_processed_file:
           file: "Inflow/_QuickCapture.md"
           instruction: "処理が完了したため、_QuickCapture.mdの中身を空にせよ。"
@@ -136,43 +128,4 @@ workflows:
           instruction: "抽出した情報を `- [ ] {イベント名} YYYY-MM-DD HH:MM` の形式で Tasks/Events.md に追記せよ。"
       - commit_and_push:
           instruction: "変更をGitにコミット＆プッシュせよ。これにより、GitHub Actionsがトリガーされ、Googleカレンダーに同期される。"
-
----
-
-# GEMINI CLI ワークフロー定義（ver.4）
-
-このファイルは、ボスの知的生産、自己理解、開発戦略、就活準備を支える統合ワークフローマネジメントです。
-
-## ディレクトリ構成（最新版）
-
-このワークフローは、基本的に`Zettelkasten-Notes`ディレクトリを基準に動作しますが、一部のワークフローはVaultのルートディレクトリを参照します。
-
-```
-. (Obsidian Vault Root)
-├── Clippings/              # ✅ Web Clipperの自動保存先 (ワークフローがここを読み取る)
-└── Zettelkasten-Notes/
-    ├── Daily/
-    ├── DevIdeas/
-    ├── FleetingNote/
-    ├── IndexNote/
-    ├── Inflow/                 # ✅ _QuickCapture.md (単一の入力ゲートウェイ)
-    ├── JobHunt/
-    ├── LiteratureNote/     # ✅ Clippingsからの移動先
-    ├── PermanentNote/
-    ├── SelfAnalysis/
-    ├── SelfKnowledge/
-    ├── Tasks/
-    └── Workflows/
-        └── GEMINI.md       # このワークフロー定義ファイル
-```
-
-
-
----
-
-# 実行例（自然言語ベース）
-
-- `gemini run quick_capture_process`
-- `gemini run self_analysis`
-- `gemini run update_moc`
-
+...
