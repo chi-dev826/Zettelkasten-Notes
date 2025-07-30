@@ -1,1 +1,1 @@
-feat(JobHunt): NTTドコモビジネスソリューションズの企業研究ノートに住宅補助情報を追記
+feat(Inflow): _QuickCapture.mdの内容を整理し、各ノートに追記
