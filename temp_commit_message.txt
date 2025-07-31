@@ -1,1 +1,1 @@
-feat(Inflow): _QuickCapture.mdの内容を整理し、各ノートに追記
+feat: Inflowの内容をデイリーノートに反映
