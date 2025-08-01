@@ -1,1 +1,1 @@
-feat: Inflowの内容をデイリーノートに反映
+feat(notes): Inflowのメモとタスクを適切な日付のデイリーノートに反映
