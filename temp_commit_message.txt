@@ -1,1 +1,1 @@
-debug: Add detailed logging to calendar sync script
+feat(notes): Inflowを整理し、デイリーノートとタスクを更新
