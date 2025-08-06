@@ -90,14 +90,18 @@ def sync_events(service, events_to_sync):
                                           maxResults=250, singleEvents=True,
                                           orderBy='startTime').execute()
     existing_events = {event['summary'] for event in events_result.get('items', [])}
+    print(f"Existing events on calendar: {existing_events}")
 
     for event in events_to_sync:
+        print(f"Processing event: {json.dumps(event, indent=2, ensure_ascii=False)}")
         if event['summary'] not in existing_events:
             try:
-                service.events().insert(calendarId=CALENDAR_ID, body=event).execute()
-                print(f"Event created: {event['summary']}")
+                created_event = service.events().insert(calendarId=CALENDAR_ID, body=event).execute()
+                print(f"Event created: {created_event.get('htmlLink')}")
             except HttpError as error:
-                print(f"An error occurred: {error} for event '{event['summary']}'")
+                print(f"An HttpError occurred: {error.resp.status} {error.resp.reason} for event '{event['summary']}' - Details: {error.content.decode()}")
+            except Exception as error:
+                print(f"An unexpected error occurred: {error} for event '{event['summary']}'")
         else:
             print(f"Event '{event['summary']}' already exists. Skipping.")
 

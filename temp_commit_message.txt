@@ -1,1 +1,1 @@
-fix: Include date in shift event summary to prevent duplicate skipping in calendar sync
+debug: Add detailed logging to calendar sync script
