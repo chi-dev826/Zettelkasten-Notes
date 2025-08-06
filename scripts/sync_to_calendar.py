@@ -50,7 +50,7 @@ def parse_shifts(content):
             start_datetime = datetime.strptime(f"{date_str} {start_time_str}", '%Y-%m-%d %H:%M')
             end_datetime = datetime.strptime(f"{date_str} {end_time_str}", '%Y-%m-%d %H:%M')
             events.append({
-                'summary': f"シフト: {start_time_str}-{end_time_str}",
+                'summary': f"シフト: {date_str} {start_time_str}-{end_time_str}",
                 'start': {'dateTime': start_datetime.isoformat(), 'timeZone': TIMEZONE},
                 'end': {'dateTime': end_datetime.isoformat(), 'timeZone': TIMEZONE},
             })

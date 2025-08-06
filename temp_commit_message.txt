@@ -1,1 +1,1 @@
-feat: Add shift information to Shifts.md
+fix: Include date in shift event summary to prevent duplicate skipping in calendar sync
