@@ -1,1 +1,1 @@
-feat: Daily note for 2025-08-05 and 2025-08-06
+feat: Add shift information to Shifts.md
