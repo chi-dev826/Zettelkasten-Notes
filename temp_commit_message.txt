@@ -1,1 +1,1 @@
-chore(inflow): Inflowを整理し、今日のToDoを更新
+chore(inflow): Inflowを整理し、今日のメモと明日のToDoを更新
