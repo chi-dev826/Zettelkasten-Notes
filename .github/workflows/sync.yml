@@ -1,4 +1,3 @@
-
 name: Sync Tasks, Shifts, and Events to Google Calendar
 
 on:
@@ -16,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # git diff のために全履歴を取得
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,21 +31,24 @@ jobs:
       - name: Determine changed file
         id: changed_files
         run: |
-          # プッシュイベントから変更されたファイルを取得
-          # cronの場合はすべてのファイルを同期対象とする
           if [ "${{ github.event_name }}" == "push" ]; then
-            files="${{ join(github.event.commits[0].added, ' ') }} ${{ join(github.event.commits[0].modified, ' ') }}"
-            echo "Detected changed files: $files"
+            # git diff を使ってプッシュ間の変更ファイルを取得する（より堅牢な方法）
+            files=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+            echo "Detected changed files:"
+            echo "$files"
+            
             sync_paths=""
-            if [[ $files == *"Tasks/University.md"* ]]; then
+            if echo "$files" | grep -q "Tasks/University.md"; then
               sync_paths="$sync_paths Tasks/University.md"
             fi
-            if [[ $files == *"Tasks/Shifts.md"* ]]; then
+            if echo "$files" | grep -q "Tasks/Shifts.md"; then
               sync_paths="$sync_paths Tasks/Shifts.md"
             fi
-            if [[ $files == *"Tasks/Events.md"* ]]; then
+            if echo "$files" | grep -q "Tasks/Events.md"; then
               sync_paths="$sync_paths Tasks/Events.md"
             fi
+            
+            echo "Syncing paths: ${sync_paths# }"
             echo "file_path=${sync_paths# }" >> $GITHUB_OUTPUT
           else
             echo "Running on schedule, syncing all files."
